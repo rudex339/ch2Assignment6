@@ -1,0 +1,14 @@
+# Visual Studio
+.vs/
+*.vc.db
+*.ipch
+
+# Unreal Engine build files
+Intermediate/
+Saved/
+DerivedDataCache/
+Binaries/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ch2Assignment6Character.h"
 #include "Engine/LocalPlayer.h"
@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "GameFramework/PlayerStart.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -18,6 +20,7 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 Ach2Assignment6Character::Ach2Assignment6Character()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -52,6 +55,27 @@ Ach2Assignment6Character::Ach2Assignment6Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void Ach2Assignment6Character::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (GetActorLocation().Z <= 900.f)
+	{
+		// 레벨에 있는 PlayerStart 가져오기
+		AActor* PlayerStart = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass());
+		if (PlayerStart)
+		{
+			SetActorLocation(PlayerStart->GetActorLocation());
+			SetActorRotation(PlayerStart->GetActorRotation());
+		}
+		else
+		{
+			// PlayerStart가 없을 때 처리
+			UE_LOG(LogTemp, Warning, TEXT("PlayerStart not found in the level!"));
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

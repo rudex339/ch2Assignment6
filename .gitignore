@@ -46,3 +46,6 @@ EncTempFolder/
 # Plugin/Module 하위도 위 패턴으로 자동 제외 (Binaries, Intermediate 등)
 # Plugins/*/Binaries/
 # Plugins/*/Intermediate/
+
+#유료에셋 제외
+/Content/WoodenProps/

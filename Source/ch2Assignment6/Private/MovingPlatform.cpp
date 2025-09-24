@@ -32,8 +32,10 @@ AMovingPlatform::AMovingPlatform()
 void AMovingPlatform::BeginPlay()
 {
 	Super::BeginPlay();
-	Start = StartPoint->GetComponentLocation();
-	End = EndPoint->GetComponentLocation();
+	if (Start == FVector(0.f, 0.f, 0.f))
+		Start = StartPoint->GetComponentLocation();
+	if (End == FVector(0.f, 0.f, 0.f))
+		End = EndPoint->GetComponentLocation();
 	
 }
 
@@ -47,11 +49,14 @@ void AMovingPlatform::Tick(float DeltaTime)
 	MoveAlpha += DeltaTime / GoalTime;
 	if (MoveAlpha >= 1.f)
 	{
-		MoveAlpha = 0.f;
+		MoveAlpha = 1.f;
 		bGoingToEnd = !bGoingToEnd;
-	}
-	else {
 
+		bIsMoving = false;
+
+		GetWorld()->GetTimerManager().SetTimer(WaitHandle, this, &AMovingPlatform::ResumeMove,
+			bGoingToEnd ? StartWaitTime:EndWaitTime, false);
+		return;
 	}
 	
 
@@ -63,3 +68,27 @@ void AMovingPlatform::Tick(float DeltaTime)
 	SetActorLocation(TargetLocation);
 }
 
+void AMovingPlatform::SetStartPointLocation(const FVector& NewLocation)
+{
+	if (StartPoint)
+	{
+		StartPoint->SetRelativeLocation(NewLocation); // 상대 위치로 설정
+		Start = StartPoint->GetComponentLocation(); // 내부 값도 갱신
+	}
+}
+
+void AMovingPlatform::SetEndPointLocation(const FVector& NewLocation)
+{
+	if (EndPoint)
+	{
+		EndPoint->SetRelativeLocation(NewLocation); // 상대 위치로 설정
+		End = EndPoint->GetComponentLocation(); // 내부 값도 갱신
+	}
+}
+
+void AMovingPlatform::ResumeMove()
+{
+	// 대기 후 이동 재개
+	MoveAlpha = 0.f;      // 다음 경로 시작
+	bIsMoving = true;
+}

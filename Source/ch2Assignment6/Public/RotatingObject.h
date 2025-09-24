@@ -14,6 +14,8 @@ class CH2ASSIGNMENT6_API ARotatingObject : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ARotatingObject();
+	UFUNCTION(BlueprintCallable)
+	void SetRotationRate(FRotator NewRate) { RotationRate = NewRate; }
 
 protected:
 	// Called when the game starts or when spawned

@@ -23,6 +23,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Location")
+	void SetStartWaitTime(float NewTime) { StartWaitTime = NewTime; }
+
+	UFUNCTION(BlueprintCallable, Category = "Location")
+	void SetEndWaitTime(float NewTime) { EndWaitTime = NewTime; }
+
+	UFUNCTION(BlueprintCallable, Category = "Location")
+	void SetStartPointLocation(const FVector& NewLocation);
+
+	/** EndPoint Arrow 위치만 변경 */
+	UFUNCTION(BlueprintCallable, Category = "Location")
+	void SetEndPointLocation(const FVector& NewLocation);
+
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Root", meta = (AllowPrivateAccess = "true"))
@@ -45,13 +58,13 @@ private:
 	bool bGoingToEnd = true;
 	float MoveAlpha = 0.f;
 
-	FVector Start;
-	FVector End;
+	FVector Start = FVector(0.f, 0.f, 0.f);
+	FVector End = FVector(0.f, 0.f, 0.f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location", meta = (AllowPrivateAccess = "true"))
-	float StartWaitTime = 0.0f;
+	float StartWaitTime = 0.5f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location", meta = (AllowPrivateAccess = "true"))
-	float EndWaitTime = 0.0f;
+	float EndWaitTime = 0.5f;
 
 	FTimerHandle WaitHandle;
 
